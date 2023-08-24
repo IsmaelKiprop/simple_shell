@@ -95,26 +95,11 @@ typedef struct passinfo
 	int histcount;
 } info_t;
 
-#define INFO_INIT { \
-    .f_name = NULL, \
-    .env = NULL, \
-    .environ = NULL, \
-    .history = NULL, \
-    .alias = NULL, \
-    .env_changed = 0, \
-    .status = 0, \
-    .cmd_buf = NULL, \
-    .cmd_buf_type = 0, \
-    .read_fd = 0, \
-    .hist_count = 0, \
-    .arg = NULL, \
-    .argv = NULL, \
-    .path = NULL, \
-    .argc = 0, \
-    .line_count = 0, \
-    .err_numb = 0, \
-    .line_count_flag = 0 \
-}
+#define INFO_INIT \
+{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
+		0, 0, 0}
+
+
 /**
  * struct builtin - contains a builtin string and related function
  * @type: the builtin command flag

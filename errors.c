@@ -32,7 +32,7 @@ int _eputchar(char c)
 
 	if (c == BUF_FLUSH || w >= WRITE_BUF_SIZE)
 	{
-		write(2, buf, i);
+		write(2, buf, w);
 		w = 0;
 	}
 	if (c != BUF_FLUSH)
@@ -66,7 +66,7 @@ int _putfd(char c, int fd)
 /**
  * _putsfd - print input string
  * @str: string to print.
- * @fd: filedescriptor to write 
+ * @fd: filedescriptor to write
  *
  * Return: numb of chars put
  */
