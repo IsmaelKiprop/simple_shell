@@ -1,72 +1,72 @@
 #include "main.h"
 
 /**
- *strn_cpy - copies a string
- *@destn: destination string to be copied to
- *@src_strn: source string
- *@x: Amount of characters to be copied
- *Return: Concatenated string
+ **_strncpy - copy string
+ *@dest: destination string to copy to
+ *@src: string source 
+ *@n: amount of char to  copy
+ *Return: concatenated string
  */
-char *strn_cpy(char *destn, char *src_strn, int x)
+char *_strncpy(char *dest, char *src, int n)
 {
-	int w, z;
-	char *u = destn;
+	int i, j;
+	char *s = dest;
 
-	w = 0;
-	while (src_strn[w] != '\0' && w < x - 1)
+	i = 0;
+	while (src[i] != '\0' && i < n - 1)
 	{
-		destn[w] = src_strn[w];
-		w++;
+		dest[i] = src[i];
+		i++;
 	}
-	if (w < x)
+	if (i < n)
 	{
-		z = w;
-		while (z < x)
+		j = i;
+		while (j < n)
 		{
-			destn[z] = '\0';
-			z++;
+			dest[j] = '\0';
+			j++;
 		}
 	}
-	return (u);
+	return (s);
 }
 
 /**
- *strn_cat - concatenates two strings
- *@destn: the first string
- *@src_strn: the second string
- *@x: the amount of bytes to be maximally used
- *Return: the concatenated string
+ **_strncat - concatenates 2 strings
+ *@dest: first string
+ *@src: second string
+ *@n: amount of bytes to maximally use
+ *Return: concatenated string
  */
-char *strn_cat(char *destn, char *src_strn, int x)
+char *_strncat(char *dest, char *src, int n)
 {
-	int w, z;
-	char *u = destn;
+	int w, j;
+	char *s = dest;
 
 	w = 0;
-	z = 0;
-	while (destn[w] != '\0')
+	j = 0;
+	while (dest[w] != '\0')
 		w++;
-	while (src_strn[z] != '\0' && z < x)
+	while (src[j] != '\0' && j < n)
 	{
-		destn[w] = src_strn[z];
+		dest[w] = src[j];
 		w++;
-		z++;
+		j++;
 	}
-	if (z < x)
-		destn[w] = '\0';
-	return (u);
+	if (j < n)
+		dest[w] = '\0';
+	return (s);
 }
 
 /**
- *str_chr - locate character in a string
- *@s: String to be parsed
- *@x: Character to look for
- *Return: (s) a pointer to memory area s
+ **_strchr - locate char in the string
+ *@s: string to be parsed
+ *@c: char to look for
+ *Return: (s) a pointer to the memory area s
  */
-char *str_chr(char *s, char x)
+char *_strchr(char *s, char c)
 {
 	do {
-		if (*s == x)
+		if (*s == c)
 			return (s);
 	} while (*s++ != '\0');
 
