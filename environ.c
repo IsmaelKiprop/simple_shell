@@ -1,88 +1,94 @@
 #include "main.h"
 
 /**
- * my_env - Prints current environment
- * @inf: Structure holding potential arguments.
+ * _myenv - print current environ
+ * @info: Structure containing potential arguments. Used for maintaining
+ *          constant function prototype.
  * Return: Always 0 Success
  */
-int my_env(passinf *inf)
+int _myenv(info_t *info)
 {
-	print_list_str(inf->env);
+	print_list_str(info->env);
 	return (0);
 }
 
 /**
- * get_env - Gets value of environ variable
- * @inf: Structure holding potential arguments.
- * @name_var: env var name
+ * _getenv - get value of  environ var
+ * @info: Structure containing potential arguments.
+ * @name: env var name
  *
  * Return: the value
  */
-char *get_env(passinf *inf, const char *name_var)
+char *_getenv(info_t *info, const char *name)
 {
-	list_str *node = inf->env;
-	char *w;
+	list_t *node = info->env;
+	char *p;
 
 	while (node)
 	{
-		w = starts_with(node->str, name_var);
-		if (w && *w)
-			return (w);
+		p = starts_with(node->str, name);
+		if (p && *p)
+			return (p);
 		node = node->next;
 	}
 	return (NULL);
 }
 
 /**
- * my_setenv - Initialize new environment variable.
- * @inf: Structure containing potential arguments.
- *  Return: Always 0 Sucess
+ * _mysetenv - Initialize new environ var,
+ *             or modify the existing
+ * @info: Structure containing potential arguments. Used for maintain
+ *        constant function prototype.
+ *  Return: Always 0 Success
  */
-int my_setenv(passinf *inf)
+int _mysetenv(info_t *info)
 {
-	if (inf->argc != 3)
+	if (info->argc != 3)
 	{
-		e_puts("Incorrect number of arguements\n");
+		_eputs("Incorrect number of arguements\n");
 		return (1);
 	}
-	if (set_env(inf, inf->argv[1], inf->argv[2]))
+	if (_setenv(info, info->argv[1], info->argv[2]))
 		return (0);
 	return (1);
 }
 
 /**
- * my_unsetenv - Remove environment variable
- * @inf: Structure containing potential arguments.
+ * _myunsetenv - Remove an environ var
+ * @info: Structure containing potential arguments. Used for maintaining
+ *        constant function prototype.
  * Return: Always 0 Success
  */
-int my_unsetenv(passinf *inf)
+int _myunsetenv(info_t *info)
 {
-	int x;
+	int i;
 
-	if (inf->argc == 1)
+	if (info->argc == 1)
 	{
-		e_puts("Too few arguements.\n");
+		_eputs("Too few arguements.\n");
 		return (1);
 	}
-	for (x = 1; x <= inf->argc; x++)
-		unset_env(inf, inf->argv[x]);
+	for (i = 1; i <= info->argc; i++)
+		_unsetenv(info, info->argv[i]);
 
 	return (0);
 }
 
 /**
- * populate_env_list - Populates env linked list
- * @inf: Structure containing potential arguments.
+ * populate_env_list - to populate env linked list
+ * @info: Structure containing potential arguments. Used for maintaining
+ *          constant function prototype.
  * Return: Always 0 Success
  */
-int populate_env_list(passinf *inf)
+int populate_env_list(info_t *info)
 {
-	list_str *node = NULL;
-	size_t x;
+	list_t *node = NULL;
+	size_t i;
 
-	for (x = 0; environ[x]; x++)
-		add_node_end(&node, environ[x], 0);
-	inf->env = node;
+	for (i = 0; environ[i]; i++)
+		add_node_end(&node, environ[i], 0);
+	info->env = node;
 	return (0);
 }
+
 
