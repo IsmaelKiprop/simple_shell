@@ -95,10 +95,26 @@ typedef struct passinfo
 	int histcount;
 } info_t;
 
-#define INFO_INIT \
-{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-		0, 0, 0}
-
+#define INFO_INIT { \
+    .f_name = NULL, \
+    .env = NULL, \
+    .environ = NULL, \
+    .history = NULL, \
+    .alias = NULL, \
+    .env_changed = 0, \
+    .status = 0, \
+    .cmd_buf = NULL, \
+    .cmd_buf_type = 0, \
+    .read_fd = 0, \
+    .hist_count = 0, \
+    .arg = NULL, \
+    .argv = NULL, \
+    .path = NULL, \
+    .argc = 0, \
+    .line_count = 0, \
+    .err_numb = 0, \
+    .line_count_flag = 0 \
+}
 /**
  * struct builtin - contains a builtin string and related function
  * @type: the builtin command flag
@@ -111,13 +127,13 @@ typedef struct builtin
 } builtin_table;
 
 
-/* toem_shloop.c */
+/* shloop.c */
 int hsh(info_t *, char **);
 int find_builtin(info_t *);
 void find_cmd(info_t *);
 void fork_cmd(info_t *);
 
-/* toem_parser.c */
+/* parser.c */
 int is_cmd(info_t *, char *);
 char *dup_chars(char *, int, int);
 char *find_path(info_t *, char *, char *);
@@ -125,39 +141,39 @@ char *find_path(info_t *, char *, char *);
 /* loophsh.c */
 int loophsh(char **);
 
-/* toem_errors.c */
+/* errors.c */
 void _eputs(char *);
 int _eputchar(char);
 int _putfd(char c, int fd);
 int _putsfd(char *str, int fd);
 
-/* toem_string.c */
+/* string.c */
 int _strlen(char *);
 int _strcmp(char *, char *);
 char *starts_with(const char *, const char *);
 char *_strcat(char *, char *);
 
-/* toem_string1.c */
+/* string1.c */
 char *_strcpy(char *, char *);
 char *_strdup(const char *);
 void _puts(char *);
 int _putchar(char);
 
-/* toem_exits.c */
+/* exits.c */
 char *_strncpy(char *, char *, int);
 char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 
-/* toem_tokenizer.c */
+/* tokenizer.c */
 char **strtow(char *, char *);
 char **strtow2(char *, char);
 
-/* toem_realloc.c */
+/* ealloc.c */
 char *_memset(char *, char, unsigned int);
 void ffree(char **);
 void *_realloc(void *, unsigned int, unsigned int);
 
-/* toem_memory.c */
+/* memory.c */
 int bfree(void **);
 
 /* main.c */
