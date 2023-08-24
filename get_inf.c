@@ -1,85 +1,73 @@
 #include "main.h"
 /**
- * clear_inf - initializes passinf struct
- * @inf: struct address
+ * clear_info - initialize info_t struct.
+ * @info: struct address.
  */
-void clear_inf(passinf *inf)
+void clear_info(info_t *info)
 {
-	inf->arg = NULL;
-	inf->argv = NULL;
-	inf->path = NULL;
-	inf->argc = 0;
+	info->arg = NULL;
+	info->argv = NULL;
+	info->path = NULL;
+	info->argc = 0;
 }
 
 /**
- * set_inf - initializes passinfo struct
- * @inf: struct address
- * @av: argument vector
+ * set_info - initialize info_t struct.
+ * @info: struct address.
+ * @av: argument vector.
  */
-void set_inf(passinf *inf, char **av)
+void set_info(info_t *info, char **av)
 {
-int w = 0;
-char *token;
+	int i = 0;
 
-inf->f_name = av[0];
-if (inf->arg)
-{
-/* Count the number of tokens */
-for (token = strtok(inf->arg, " \t"); token; token = strtok(NULL, " \t"))
-{
-w++;
-}
-
-/* Allocate memory for inf->argv */
-inf->argv = (char **)malloc(sizeof(char *) * (w + 1)); /* +1 for NULL */
-if (inf->argv)
-{
-int i = 0;
-char *token;
-
-/* Copy tokens to inf->argv */
-token = strtok(inf->arg, " \t");
-while (token)
-{
-inf->argv[i] = strdup(token);
-token = strtok(NULL, " \t");
-i++;
-}
-inf->argv[i] = NULL;
-
-inf->argc = w;
-
-replace_alias(inf);
-replace_vars(inf);
-}
-}
-}
-
-/**
- * free_inf - frees passinf struct fields
- * @inf: Struct address
- * @all: true if freeing all fields.
- */
-void free_inf(passinf *inf, int all)
-{
-	ffree(inf->argv);
-	inf->argv = NULL;
-	inf->path = NULL;
-	if (all)
+	info->fname = av[0];
+	if (info->arg)
 	{
-		if (!inf->cmd_buf)
-			free(inf->arg);
-		if (inf->env)
-			free_list(&(inf->env));
-		if (inf->history)
-			free_list(&(inf->history));
-		if (inf->alias)
-			free_list(&(inf->alias));
-		ffree(inf->environ);
-			inf->environ = NULL;
-		bfree((void **)inf->cmd_buf);
-		if (inf->read_fd > 2)
-			close(inf->read_fd);
-		e_putchar(BUFF_FLUSH);
+		info->argv = strtow(info->arg, " \t");
+		if (!info->argv)
+		{
+			info->argv = malloc(sizeof(char *) * 2);
+			if (info->argv)
+			{
+				info->argv[0] = _strdup(info->arg);
+				info->argv[1] = NULL;
+			}
+		}
+		for (i = 0; info->argv && info->argv[i]; i++)
+			;
+		info->argc = i;
+
+		replace_alias(info);
+		replace_vars(info);
 	}
 }
+
+/**
+ * free_info - frees info_t struct field
+ * @info: struct address.
+ * @all: true freeing all fields
+ */
+void free_info(info_t *info, int all)
+{
+	ffree(info->argv);
+	info->argv = NULL;
+	info->path = NULL;
+	if (all)
+	{
+		if (!info->cmd_buf)
+			free(info->arg);
+		if (info->env)
+			free_list(&(info->env));
+		if (info->history)
+			free_list(&(info->history));
+		if (info->alias)
+			free_list(&(info->alias));
+		ffree(info->environ);
+			info->environ = NULL;
+		bfree((void **)info->cmd_buf);
+		if (info->readfd > 2)
+			close(info->readfd);
+		_putchar(BUF_FLUSH);
+	}
+}
+
