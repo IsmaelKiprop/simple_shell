@@ -1,24 +1,24 @@
 #include "main.h"
 
 /**
- * err_str - Converts a string to an integer
- * @x: String to be converted
- * Return: If no numbers in string return 0, otherwise return -1
- *
+ * _erratoi - convert string to int
+ * @s: string to convert.
+ * Return: no numbers return 0 , converted number otherwise
+ *       return -1 on error
  */
-int err_str(char *x)
+int _erratoi(char *s)
 {
-	int w = 0;
+	int i = 0;
 	unsigned long int result = 0;
 
-	if (*x == '+')
-		x++;
-	for (w = 0;  x[w] != '\0'; w++)
+	if (*s == '+')
+		s++;  /* TODO: why does this make main return 255? */
+	for (i = 0;  s[i] != '\0'; i++)
 	{
-		if (x[w] >= '0' && x[w] <= '9')
+		if (s[i] >= '0' && s[i] <= '9')
 		{
 			result *= 10;
-			result += (x[w] - '0');
+			result += (s[i] - '0');
 			if (result > INT_MAX)
 				return (-1);
 		}
@@ -29,37 +29,38 @@ int err_str(char *x)
 }
 
 /**
- * print_errors - Prints error messages
- * @inf: Parameter and return inf struct
- * @iss: String holding specified error type
- * Return: If no numbers in string return 0, otherwise return -1
+ * print_error - print error messages
+ * @info: parameter & return info struct
+ * @estr: string contains specified type of errors
+ * Return: no numbers return 0, converted number otherwise
+ *        return -1 on error
  */
-void print_errors(passinf *inf, char *iss)
+void print_error(info_t *info, char *estr)
 {
-	e_puts(inf->f_name);
-	e_puts(": ");
-	print_d(inf->line_count, STDERR_FILENO);
-	e_puts(": ");
-	e_puts(inf->argv[0]);
-	e_puts(": ");
-	e_puts(iss);
+	_eputs(info->fname);
+	_eputs(": ");
+	print_d(info->line_count, STDERR_FILENO);
+	_eputs(": ");
+	_eputs(info->argv[0]);
+	_eputs(": ");
+	_eputs(estr);
 }
 
 /**
- * print_d - function prints a decimal (integer) number (base 10)
- * @input: the input
- * @fd: the filedescriptor to write to
+ * print_d - function print decimals (integer) num (base 10)
+ * @input: input
+ * @fd: filedescriptor to write on
  *
- * Return: number of characters printed
+ * Return: number of char printed
  */
 int print_d(int input, int fd)
 {
-	int (*__putchar)(char) = e_putchar;
-	int x, count = 0;
+	int (*__putchar)(char) = _putchar;
+	int i, count = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
-		__putchar = e_putchar;
+		__putchar = _eputchar;
 	if (input < 0)
 	{
 		_abs_ = -input;
@@ -69,14 +70,14 @@ int print_d(int input, int fd)
 	else
 		_abs_ = input;
 	current = _abs_;
-	for (x = 1000000000; x > 1; x /= 10)
+	for (i = 1000000000; i > 1; i /= 10)
 	{
-		if (_abs_ / x)
+		if (_abs_ / i)
 		{
-			__putchar('0' + current / x);
+			__putchar('0' + current / i);
 			count++;
 		}
-		current %= x;
+		current %= i;
 	}
 	__putchar('0' + current);
 	count++;
@@ -85,7 +86,7 @@ int print_d(int input, int fd)
 }
 
 /**
- * convert_number - converter function, a clone of itoa
+ * convert_number - converter function, clone of itoa
  * @num: number
  * @base: base
  * @flags: argument flags
@@ -121,8 +122,8 @@ char *convert_number(long int num, int base, int flags)
 }
 
 /**
- * remove_comments - replaces first instance of '#' with '\0'
- * @buf: Address of the string to modify
+ * remove_comments - function replace first instance of '#' with '\0'
+ * @buf: string address to modify
  *
  * Return: Always 0 Success;
  */
@@ -137,4 +138,3 @@ void remove_comments(char *buf)
 			break;
 		}
 }
-
