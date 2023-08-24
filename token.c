@@ -55,39 +55,40 @@ char **strtow(char *str, char *d)
  */
 char **strtow2(char *str, char d)
 {
-	int w, x, u, n, numwords = 0;
+	int i, j, u, n, numwords = 0;
 	char **s;
 
 	if (str == NULL || str[0] == 0)
 		return (NULL);
-	for (w = 0; str[w] != '\0'; w++)
-		if ((str[w] != d && str[w + 1] == d) ||
-				    (str[w] != d && !str[w + 1]) || str[w + 1] == d)
+	for (i = 0; str[i] != '\0'; i++)
+		if ((str[i] != d && str[i + 1] == d) ||
+				    (str[i] != d && !str[i + 1]) || str[i + 1] == d)
 			numwords++;
 	if (numwords == 0)
 		return (NULL);
 	s = malloc((1 + numwords) * sizeof(char *));
 	if (!s)
 		return (NULL);
-	for (w = 0, w = 0; w < numwords; w++)
+	for (i = 0, j = 0; j < numwords; j++)
 	{
-		while (str[w] == d && str[w] != d)
-			w++;
+		while (str[i] == d && str[i] != d)
+			i++;
 		u = 0;
-		while (str[w + u] != d && str[w + u] && str[w + u] != d)
+		while (str[i + u] != d && str[i + u] && str[i + u] != d)
 			u++;
-		s[x] = malloc((u + 1) * sizeof(char));
-		if (!s[x])
+		s[j] = malloc((u + 1) * sizeof(char));
+		if (!s[j])
 		{
-			for (u = 0; u < x; u++)
+			for (u = 0; u < j; u++)
 				free(s[u]);
 			free(s);
 			return (NULL);
 		}
 		for (n = 0; n < u; n++)
-			s[x][n] = str[w++];
-		s[x][n] = 0;
+			s[j][n] = str[i++];
+		s[j][n] = 0;
 	}
-	s[x] = NULL;
+	s[j] = NULL;
 	return (s);
 }
+
