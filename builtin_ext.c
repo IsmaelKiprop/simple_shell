@@ -1,18 +1,99 @@
 #include "main.h"
 /**
- * my_alias - mimics the alias builtin (man alias)
- * @inf: Structure containing potential arguments.
- *  Return: Always 0 SUCCESS
+ * _myhistory - Displays  hist list, one command by line, preceded
+ *              with line numbers, starting at 0.
+ * @info: Structure containing potential arguments. Used for maintaining
+ *        constant function prototype.
+ *  Return: Always 0 Success
  */
-int my_alias(passinf *inf)
+int _myhistory(info_t *info)
 {
-	int x = 0;
-	char *w = NULL;
-	list_str *node = NULL;
+	print_list(info->history);
+	return (0);
+}
 
-	if (inf->argc == 1)
+/**
+ * unset_alias - sets alias to the string
+ * @info: parameter struct
+ * @str: string alias
+ *
+ * Return: Always 0 Success, 1 on error
+ */
+int unset_alias(info_t *info, char *str)
+{
+	char *p, c;
+	int ret;
+
+	p = _strchr(str, '=');
+	if (!p)
+		return (1);
+	c = *p;
+	*p = 0;
+	ret = delete_node_at_index(&(info->alias),
+		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
+	*p = c;
+	return (ret);
+}
+
+/**
+ * set_alias - sets alias to the string
+ * @info: parameter struct
+ * @str: string alias
+ *
+ * Return: Always 0 success, 1 on error
+ */
+int set_alias(info_t *info, char *str)
+{
+	char *p;
+
+	p = _strchr(str, '=');
+	if (!p)
+		return (1);
+	if (!*++p)
+		return (unset_alias(info, str));
+
+	unset_alias(info, str);
+	return (add_node_end(&(info->alias), str, 0) == NULL);
+}
+
+/**
+ * print_alias - prints an alias the string
+ * @node: alias node
+ *
+ * Return: Always 0 Success, 1 on error
+ */
+int print_alias(list_t *node)
+{
+	char *p = NULL, *a = NULL;
+
+	if (node)
 	{
-		node = inf->alias;
+		p = _strchr(node->str, '=');
+		for (a = node->str; a <= p; a++)
+		_putchar(*a);
+		_putchar('\'');
+		_puts(p + 1);
+		_puts("'\n");
+		return (0);
+	}
+	return (1);
+}
+
+/**
+ * _myalias - mimic alias builtin (man alias)
+ * @info: Structure containing potential arguments. Used for maintaining
+ *          constant function prototype.
+ *  Return: Always 0 Success
+ */
+int _myalias(info_t *info)
+{
+	int i = 0;
+	char *p = NULL;
+	list_t *node = NULL;
+
+	if (info->argc == 1)
+	{
+		node = info->alias;
 		while (node)
 		{
 			print_alias(node);
@@ -20,95 +101,16 @@ int my_alias(passinf *inf)
 		}
 		return (0);
 	}
-	for (x = 1; inf->argv[x]; x++)
+	for (i = 1; info->argv[i]; i++)
 	{
-		w = str_chr(inf->argv[x], '=');
-		if (w)
-			set_alias(inf, inf->argv[x]);
+		p = _strchr(info->argv[i], '=');
+		if (p)
+			set_alias(info, info->argv[i]);
 		else
-			print_alias(node_starts_with(inf->alias, inf->argv[x], '='));
+			print_alias(node_starts_with(info->alias, info->argv[i], '='));
 	}
 
 	return (0);
-}
-
-/**
- * my_history - displays the history list, one command by line, preceded
- *              with line numbers, starting at 0.
- * @inf: Structure containing potential arguments. Used to maintain
- *        constant function prototype.
- *  Return: Always 0 Success
- */
-int my_history(passinf *inf)
-{
-	print_list_str(inf->history);
-	return (0);
-}
-
-/**
- * unset_alias - sets alias to string
- * @inf: parameter struct
- * @str: the string alias
- *
- * Return: Always 0 on success, 1 on error
- */
-int unset_alias(passinf *inf, char *str)
-{
-	char *w, x;
-	int ret;
-
-	w = strchr(str, '=');
-	if (!w)
-		return (1);
-	x = *w;
-	*w = 0;
-	ret = delete_node_at_index(&(inf->alias),
-		get_node_index(inf->alias, node_starts_with(inf->alias, str, -1)));
-	*w = x;
-	return (ret);
-}
-
-/**
- * set_alias - sets alias to string
- * @inf: parameter struct
- * @str: the string alias
- *
- * Return: Always 0 on success, 1 on error
- */
-int set_alias(passinf *inf, char *str)
-{
-	char *w;
-
-	w = strchr(str, '=');
-	if (!w)
-		return (1);
-	if (!*++w)
-		return (unset_alias(inf, str));
-
-	unset_alias(inf, str);
-	return (add_node_end(&(inf->alias), str, 0) == NULL);
-}
-
-/**
- * print_alias - Prints an alias string
- * @node: alias node
- *
- * Return: Always 0 on success, 1 on error
- */
-int print_alias(list_str *node)
-{
-	char *w = NULL, *x = NULL;
-
-	if (node)
-	{
-		w = strchr(node->str, '=');
-		for (x = node->str; x <= w; x++)
-		e_putchar(*x);
-		e_putchar('\'');
-		e_puts(w + 1);
-		e_putchar('\n');
-		return (0);
-	}
 }
 
 
