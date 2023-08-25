@@ -39,9 +39,9 @@ int _isalpha(int c)
 }
 
 /**
- * _atoi - converts the string to integer
+ * _atoi - converts the string to int
  * @x: string to convert
- * Return: 0 if there is no numbers in the  string, or converted number otherwise
+ * Return: 0 if no numbers in the string, otherwise convert num
  */
 
 int _atoi(char *x)
